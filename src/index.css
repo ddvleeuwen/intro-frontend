@@ -1,0 +1,17 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  font-family: Inter, sans-serif;
+}
+
+*:focus-visible {
+  outline-offset: 2px;
+  outline: dashed 2px;
+}
+
+body {
+  padding: 0;
+  margin: 0;
+}
