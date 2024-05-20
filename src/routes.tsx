@@ -3,8 +3,10 @@ import {
   IconCamera,
   IconClipboardList,
   IconHomeCheck,
+  IconLogin2,
 } from "@tabler/icons-react";
 import LandingPage from "./pages/LandingPage.tsx";
+import LoginPage from "./pages/LoginPage.tsx";
 
 export type RouteType = {
   name: string;
@@ -13,8 +15,7 @@ export type RouteType = {
   icon?: ReactNode;
 }
 
-export const navigation: RouteType[] =
-[
+export const navigation: RouteType[] = [
   {
     component: <LandingPage/>,
     name: "Home",
@@ -32,11 +33,21 @@ export const navigation: RouteType[] =
 export const actionRoute: RouteType | undefined = {
   component: <h1>Team overview</h1>,
   name: "Speel",
-  path: "/speel",
+  path: "/team",
   icon: <IconCamera size="18px"/>
 }
 
+export const buttonRoutes: RouteType[] = [
+  {
+    component: <LoginPage/>,
+    name: "Login",
+    path: "/login",
+    icon: <IconLogin2/>
+  }
+]
+
 export const combined = [
   ...navigation,
-  ...(actionRoute ? [actionRoute] : [])
+  ...(actionRoute ? [ actionRoute ] : []),
+  ...buttonRoutes,
 ]

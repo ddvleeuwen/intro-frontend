@@ -5,9 +5,9 @@ import { combined, navigation, actionRoute } from "./routes.tsx";
 import Sidebar from "./components/Sidebar.tsx";
 
 const AppRoot = () => {
-  const [prevScrollPos, setPrevScrollPos] = useState(0);
-  const [visible, setVisible] = useState(false);
-  const [sidebarHidden, setSidebarHidden] = useState(true);
+  const [ prevScrollPos, setPrevScrollPos ] = useState(0);
+  const [ visible, setVisible ] = useState(false);
+  const [ sidebarHidden, setSidebarHidden ] = useState(true);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -20,7 +20,7 @@ const AppRoot = () => {
 
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
-  }, [prevScrollPos, visible]);
+  }, [ prevScrollPos, visible ]);
 
   useEffect(() => {
     if (sidebarHidden) {
@@ -28,7 +28,7 @@ const AppRoot = () => {
     } else {
       document.body.style.overflow = 'hidden';
     }
-  }, [sidebarHidden]);
+  }, [ sidebarHidden ]);
 
   return (
     <Router>

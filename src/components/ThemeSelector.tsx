@@ -1,6 +1,6 @@
-import {IconDeviceDesktop, IconMoon, IconSun} from "@tabler/icons-react";
-import {getLocalStoredTheme, setTheme} from "../utils/theme.tsx";
-import Listbox, {ListboxOption} from "./generic/Listbox.tsx";
+import { IconDeviceDesktop, IconMoon, IconSun } from "@tabler/icons-react";
+import { getLocalStoredTheme, setTheme } from "../utils/theme.tsx";
+import Listbox, { ListboxOption } from "./generic/Listbox.tsx";
 
 const getHeaderIcon = () => {
   // check for "dark" class on html element
@@ -12,7 +12,7 @@ const getHeaderIcon = () => {
 }
 
 const getCurrentOption = (option: string) => {
-  return options.find((o) => o.option === option) || options[2];
+  return options.find((o) => o.option === option) || options[ 2 ];
 }
 
 const options: ListboxOption[] = [
@@ -21,7 +21,7 @@ const options: ListboxOption[] = [
   { id: 3, option: 'system', name: 'System', icon: <IconDeviceDesktop size="18px"/>, headerIcon: () => getHeaderIcon() },
 ]
 
-const ThemeSelector = ({large = false}) => {
+const ThemeSelector = ({ large = false }) => {
   return (
     <Listbox
       defaultOption={getCurrentOption(getLocalStoredTheme())}

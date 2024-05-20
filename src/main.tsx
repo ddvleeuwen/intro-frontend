@@ -2,7 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 import AppRoot from './App.tsx'
 import './index.css'
-import {getLocalStoredTheme, setTheme} from "./utils/theme.tsx";
+import { getLocalStoredTheme, setTheme } from "./utils/theme.tsx";
 
 setTheme(getLocalStoredTheme());
 

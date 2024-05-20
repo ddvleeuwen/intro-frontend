@@ -1,8 +1,8 @@
-import {actionRoute, navigation} from "../routes.tsx";
-import {Link} from "react-router-dom";
+import { actionRoute, buttonRoutes, navigation } from "../routes.tsx";
+import { Link } from "react-router-dom";
 import ThemeSelector from "./ThemeSelector.tsx";
-import {IconX} from "@tabler/icons-react";
-import {cst} from "../constants.tsx";
+import { IconX } from "@tabler/icons-react";
+import { cst } from "../constants.tsx";
 
 export type SidebarProps = {
   setHidden: (hidden: boolean) => void;
@@ -35,7 +35,7 @@ const Sidebar = (props: SidebarProps) => {
           {navigation.map((route, index) => (
             <Link
               key={index}
-              className="flex items-center gap-2 p-4 px-4 rounded-xl bg-bg-primary text-txt-secondary border-2 border-border dark:bg-dark-bg-secondary dark:text-dark-txt-primary dark:border-dark-border"
+              className="flex items-center gap-2 p-4 px-4 rounded-lg bg-bg-primary text-txt-secondary border-2 border-border dark:bg-dark-bg-secondary dark:text-dark-txt-primary dark:border-dark-border"
               to={route.path}
             >
               <div aria-hidden>{route.icon}</div>
@@ -47,13 +47,23 @@ const Sidebar = (props: SidebarProps) => {
           {actionRoute && (
             <Link
               to={actionRoute.path}
-              className="flex items-center gap-2 p-4 px-4 rounded-xl bg-primary text-txt-contrast border-2 border-primary-border dark:bg-dark-primary dark:text-dark-txt-contrast dark:border-dark-primary-border"
+              className="flex items-center gap-2 p-4 px-4 rounded-lg bg-primary text-txt-contrast border-2 border-primary-border dark:bg-dark-primary dark:text-dark-txt-contrast dark:border-dark-primary-border"
             >
               <div aria-hidden>{actionRoute.icon}</div>
               {actionRoute.name}
             </Link>
           )}
           <ThemeSelector large={true}/>
+          {buttonRoutes.map((route, index) => (
+            <Link
+              key={index}
+              className="flex items-center justify-between gap-2 p-4 px-4 rounded-lg bg-bg-primary text-txt-secondary border-2 border-border dark:bg-dark-bg-secondary dark:text-dark-txt-primary dark:border-dark-border"
+              to={route.path}
+            >
+              {route.name}
+              <div aria-hidden>{route.icon}</div>
+            </Link>
+          ))}
         </div>
       </nav>
       <div className="w-full" onClick={() => props.setHidden(true)}></div>

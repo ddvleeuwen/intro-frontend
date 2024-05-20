@@ -1,5 +1,5 @@
-import {Fragment, ReactElement, useEffect, useState} from "react";
-import {Listbox as UIListbox} from "@headlessui/react";
+import { Fragment, ReactElement, useEffect, useState } from "react";
+import { Listbox as UIListbox } from "@headlessui/react";
 
 export type ListboxOption = {
   id: number;
@@ -19,11 +19,11 @@ export type ListboxProps = {
 }
 
 const Listbox = (props: ListboxProps) => {
-  const [selectedOption, setSelectedOption] = useState(props.defaultOption);
+  const [ selectedOption, setSelectedOption ] = useState(props.defaultOption);
 
   useEffect(() => {
     props.onChange(selectedOption.option);
-  }, [selectedOption, props])
+  }, [ selectedOption, props ])
 
   return (
     <div className="relative">
@@ -39,7 +39,7 @@ const Listbox = (props: ListboxProps) => {
           className={`${props.large ? "bottom-16 w-full" : "top-full right-0"} absolute mt-2 py-1 text-txt-secondary dark:text-dark-txt-secondary border border-border dark:border-dark-border rounded-lg shadow-3d-sm bg-bg-primary dark:bg-dark-bg-primary overflow-hidden`}>
           {props.options.map((option) => (
             <UIListbox.Option key={option.id} value={option} as={Fragment}>
-              {({active}) => (
+              {({ active }) => (
                 <li
                   className={`flex items-center gap-2 w-full py-1 px-4 ${active ? 'bg-bg-secondary text-txt-primary dark:bg-dark-bg-secondary dark:text-dark-txt-primary' : ''}`}>
                   <p>{option.icon}</p>

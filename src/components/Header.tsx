@@ -1,8 +1,8 @@
-import {actionRoute, RouteType} from "../routes.tsx";
-import {Link} from "react-router-dom";
+import { actionRoute, buttonRoutes, RouteType } from "../routes.tsx";
+import { Link } from "react-router-dom";
 import ThemeSelector from "./ThemeSelector.tsx";
-import {cst} from "../constants.tsx";
-import {IconMenu2} from "@tabler/icons-react";
+import { cst } from "../constants.tsx";
+import { IconMenu2 } from "@tabler/icons-react";
 
 type HeaderProps = {
   routes: RouteType[];
@@ -44,18 +44,28 @@ const Header = (props: HeaderProps) => {
               className="p-1 px-4 flex gap-2 items-center rounded-full bg-primary text-txt-contrast border-2 border-primary-border dark:bg-dark-primary dark:text-dark-txt-contrast dark:border-dark-primary-border"
             >
               <div aria-hidden>{actionRoute.icon}</div>
-                {actionRoute.name}
+              {actionRoute.name}
             </Link>
           )}
           <ThemeSelector large={false}/>
         </div>
         <button
           className="flex justify-center items-center h-9 w-9 rounded-full text-txt-secondary dark:text-dark-txt-secondary hover:bg-stone-200 f2ocus:bg-stone-200 dark:hover:bg-stone-800 dark:focus:bg-stone-800 md:hidden"
-          aria-label="Open Sidebar Menu"
+          title="Open Sidebar Menu"
           onClick={() => props.setSidebarHidden(false)}
         >
           <IconMenu2/>
         </button>
+        {buttonRoutes.map((buttonRoute, index) => (
+          <Link
+            className="flex justify-center items-center h-9 w-9 rounded-full text-txt-secondary dark:text-dark-txt-secondary hover:bg-stone-200 f2ocus:bg-stone-200 dark:hover:bg-stone-800 dark:focus:bg-stone-800 max-sm:hidden"
+            title={buttonRoute.name}
+            to={buttonRoute.path}
+            key={index}
+          >
+            <div aria-hidden>{buttonRoute.icon}</div>
+          </Link>
+        ))}
       </div>
     </header>
   )
