@@ -7,6 +7,7 @@ import {
 } from "@tabler/icons-react";
 import LandingPage from "./pages/LandingPage.tsx";
 import LoginPage from "./pages/LoginPage.tsx";
+import TeamOverviewPage from "./pages/team/TeamOverviewPage.tsx";
 
 export type RouteType = {
   name: string;
@@ -31,7 +32,7 @@ export const navigation: RouteType[] = [
 ]
 
 export const actionRoute: RouteType | undefined = {
-  component: <h1>Team overview</h1>,
+  component: <TeamOverviewPage/>,
   name: "Speel",
   path: "/team",
   icon: <IconCamera size="18px"/>
