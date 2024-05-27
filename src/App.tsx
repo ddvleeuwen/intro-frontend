@@ -37,7 +37,7 @@ const AppRoot = () => {
           <a href="#main" className="text-txt-contrast dark:text-dark-txt-contrast">Skip to content</a>
         </div>
       </div>
-      <div className={`p-8 max-md:px-4 sticky transition-all ${visible ? 'top-0' : 'top-[-100%]'}`}>
+      <div className={`p-8 max-md:px-4 sticky z-30 transition-all ${visible ? 'top-0' : 'top-[-100%]'}`}>
         <Header routes={navigation} actionRoute={actionRoute} setSidebarHidden={setSidebarHidden}/>
       </div>
       <Sidebar setHidden={setSidebarHidden} hidden={sidebarHidden}/>

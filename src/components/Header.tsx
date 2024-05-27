@@ -1,6 +1,5 @@
 import { actionRoute, buttonRoutes, RouteType } from "../routes.tsx";
 import { Link } from "react-router-dom";
-import ThemeSelector from "./ThemeSelector.tsx";
 import { cst } from "../constants.tsx";
 import { IconMenu2 } from "@tabler/icons-react";
 
@@ -47,7 +46,6 @@ const Header = (props: HeaderProps) => {
               {actionRoute.name}
             </Link>
           )}
-          <ThemeSelector large={false}/>
         </div>
         <button
           className="flex justify-center items-center h-9 w-9 rounded-full text-txt-secondary dark:text-dark-txt-secondary hover:bg-stone-200 f2ocus:bg-stone-200 dark:hover:bg-stone-800 dark:focus:bg-stone-800 md:hidden"

@@ -8,6 +8,8 @@ const TeamOverviewPage = () => {
   const page = queryParameters.get("page")
   const [ isRight, setIsRight ] = useState(page == "bingo");
 
+  console.log("RERENDERED")
+
   return (
     <div>
       <nav className="relative m-auto bg-bg-primary dark:bg-dark-bg-primary w-fit rounded-full border-border dark:border-dark-border border shadow-3d-sm">

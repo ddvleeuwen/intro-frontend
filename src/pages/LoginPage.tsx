@@ -11,7 +11,7 @@ const LoginPage = () => {
   const [ inputCode, setInputCode ] = useState("")
 
   if (code && /^\d+$/.test(code)) {
-    document.cookie = "token=" + code;
+    localStorage.setItem("token", code);
     return <Navigate to="/team"/>;
   }
 
