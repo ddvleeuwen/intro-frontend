@@ -17,6 +17,7 @@ type CrazyChallengeState = {
 const CrazyChallenge = (props: CrazyChallengeProps) => {
   const [ percentage, setPercentage ] = useState(0);
   const [ uploading, setUploading ] = useState(false);
+  const [ error, setError ] = useState<string | undefined>(undefined);
 
   const uploadFile = (e: FormEvent, challenge: Challenge) => {
     const formData = new FormData((e.target as HTMLElement).parentElement as HTMLFormElement);
@@ -25,31 +26,44 @@ const CrazyChallenge = (props: CrazyChallengeProps) => {
     uploadChallenge(challenge, formData, setPercentage).then((response) => {
       console.log(response.data);
       setUploading(false);
+      setError(undefined);
     }).catch((error) => {
       console.log(error);
       setUploading(false);
+      setPercentage(0);
+      setError("Something went wrong while uploading your submission... Please try again later.")
     }).finally(() => {
       props.refetch();
     });
+  }
+
+  const getMessage = () => {
+    if (error) {
+      return "Error...";
+    } else if (percentage > 0) {
+      return uploading? "Uploading... " + percentage + "%" : "Submitted!";
+    } else {
+      return `Submit ${props.item.state? " again" : ""} (#${props.item.id})`;
+    }
   }
 
   const getState = (state: string): CrazyChallengeState | undefined => {
     switch (state) {
       case "PENDING":
         return {
-          icon: <IconLoader width="18px" className="animate-spin"/>,
+          icon: <IconLoader size="18px" className="animate-spin"/>,
           text: "in review",
           className: "bg-stone-200 text-stone-800 dark:bg-stone-800 dark:text-stone-200"
         }
       case "APPROVED":
         return {
-          icon: <IconFaceId width="18px"/>,
+          icon: <IconFaceId size="18px"/>,
           text: "goedgekeurd",
           className: "bg-emerald-200 text-emerald-800 dark:bg-emerald-800 dark:text-emerald-200"
         }
       case "DENIED":
         return {
-          icon: <IconFaceIdError width="18px"/>,
+          icon: <IconFaceIdError size="18px"/>,
           text: "afgekeurd",
           className: "bg-rose-200 text-rose-800 dark:bg-rose-800 dark:text-rose-200"
         }
@@ -57,6 +71,8 @@ const CrazyChallenge = (props: CrazyChallengeProps) => {
   }
 
   const state = getState(props.item.state);
+
+  const denialReason = props.item.state === "DENIED" ? props.item.deniedReason : undefined;
 
   return (
     <>
@@ -78,16 +94,21 @@ const CrazyChallenge = (props: CrazyChallengeProps) => {
         <form id={"form-" + props.item.id} onChange={(event) => uploadFile(event, props.item)}>
           <label
             htmlFor={"file-selector-" + props.item.id}
-            className="relative w-full mt-2 py-2 px-4 flex items-center cursor-pointer justify-center rounded-lg bg-bg-primary text-txt-primary border-2 border-border dark:bg-dark-bg-primary dark:text-dark-txt-primary dark:border-dark-border"
+            className={`relative w-full mt-2 py-2 px-4 flex items-center cursor-pointer justify-center rounded-lg bg-bg-primary text-txt-primary border-2 border-border dark:bg-dark-bg-primary dark:text-dark-txt-primary dark:border-dark-border ${denialReason ? "rounded-b-none" : ""}`}
           >
             <div style={{ width: `calc(100%*${(percentage > 0 ? (uploading ? percentage / 100 : 1) : 1)})` }}
-                 className="transition-all absolute left-0 h-full flex items-center cursor-pointer justify-center rounded-md bg-primary text-txt-contrast border-2 border-primary-border dark:bg-dark-primary dark:text-dark-txt-contrast dark:border-dark-primary-border"/>
+                 className={`transition-all absolute left-0 h-full flex items-center cursor-pointer justify-center rounded-md bg-primary text-txt-contrast border-2 border-primary-border dark:bg-dark-primary dark:text-dark-txt-contrast dark:border-dark-primary-border ${denialReason ? "rounded-b-none" : ""}`}/>
             <div className="relative">
-              {(percentage > 0 ? (uploading ? "Uploading... " + percentage + "%" : "Success!") : `Submit ${props.item.state ? " again" : ""} (#${props.item.id})`)}
+              {getMessage()}
             </div>
           </label>
           <input id={"file-selector-" + props.item.id} type="file" name="files" className="hidden"/>
         </form>
+        {(denialReason || error) && (
+          <p className="rounded-b-md px-2 py-1 font-bold italic text-sm bg-rose-200 text-rose-800 dark:bg-rose-800 dark:text-rose-200">
+            {error ?? denialReason}
+          </p>
+        )}
       </article>
       <hr className="my-4 border-border"/>
     </>

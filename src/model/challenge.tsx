@@ -5,5 +5,5 @@ export type Challenge = {
   points: number;
   state: "PENDING" | "APPROVED" | "DENIED";
   submittedAt: string;
+  deniedReason?: string;
 }
-

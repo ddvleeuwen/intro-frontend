@@ -1,8 +1,9 @@
 import { actionRoute, buttonRoutes, navigation } from "../routes.tsx";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import ThemeSelector from "./ThemeSelector.tsx";
 import { IconX } from "@tabler/icons-react";
 import { cst } from "../constants.tsx";
+import { useEffect } from "react";
 
 export type SidebarProps = {
   setHidden: (hidden: boolean) => void;
@@ -10,6 +11,12 @@ export type SidebarProps = {
 }
 
 const Sidebar = (props: SidebarProps) => {
+  const location = useLocation();
+
+  useEffect(() => {
+    props.setHidden(true);
+  }, [ location ]);
+
   return (
     <aside className={`${props.hidden ? 'hidden' : ''} h-full w-full fixed z-30 bg-opacity-30 bg-black flex top-0`}>
       <nav className="flex p-6 justify-between flex-col min-w-80 max-sm:min-w-full h-full bg-bg-primary sm:border-r-2 border-border dark:bg-dark-bg-primary dark:border-dark-border">

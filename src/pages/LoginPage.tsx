@@ -1,18 +1,41 @@
 import { Button } from '@headlessui/react'
-import { Navigate } from "react-router";
+import { useNavigate } from "react-router";
 import { useState } from "react";
 import Field from "../components/generic/Field.tsx";
-
+import { login } from "../services/auth.service.tsx";
 
 const LoginPage = () => {
   const queryParameters = new URLSearchParams(window.location.search)
   const code = queryParameters.get("code")
 
-  const [ inputCode, setInputCode ] = useState("")
+  const navigate = useNavigate();
 
-  if (code && /^\d+$/.test(code)) {
-    localStorage.setItem("token", code);
-    return <Navigate to="/team"/>;
+  const [ inputCode, setInputCode ] = useState("");
+  const [ error, setError ] = useState("");
+
+  const tryLogin = (loginCode: string) => {
+    if (/^\d+$/.test(loginCode)) {
+      login(loginCode).then(() => {
+        // use react-router route to /team
+        navigate("/team");
+      }).catch(() => {
+        setError("Wrong login code, please try again");
+      });
+    } else {
+      setError("Invalid format for a login code, please only use numbers");
+    }
+  }
+
+  if (code) tryLogin(code);
+
+  if (code && !error) {
+    return <></>
+  }
+
+  const submit = () => {
+    if (inputCode) {
+      tryLogin(inputCode);
+    }
   }
 
   return (
@@ -20,14 +43,13 @@ const LoginPage = () => {
       <Field
         label="Login Code"
         description="Enter your groups secret login code here"
-        error=""
-        placeholder="1234567890"
+        error={error}
+        placeholder={"1234567890"}
+        defaultValue={code ?? undefined}
         setValue={setInputCode}
       />
 
-      {inputCode}
-
-      <Button className="mt-4 p-1 px-4 flex gap-2 items-center rounded-full bg-primary text-txt-contrast border-2 border-primary-border dark:bg-dark-primary dark:text-dark-txt-contrast dark:border-dark-primary-border">
+      <Button onClick={submit} className="mt-4 p-1 px-4 flex gap-2 items-center rounded-full bg-primary text-txt-contrast border-2 border-primary-border dark:bg-dark-primary dark:text-dark-txt-contrast dark:border-dark-primary-border">
         Log in!
       </Button>
     </>
