@@ -23,8 +23,7 @@ const CrazyChallenge = (props: CrazyChallengeProps) => {
     const formData = new FormData((e.target as HTMLElement).parentElement as HTMLFormElement);
     setUploading(true);
 
-    uploadChallenge(challenge, formData, setPercentage).then((response) => {
-      console.log(response.data);
+    uploadChallenge(challenge, formData, setPercentage).then(() => {
       setUploading(false);
       setError(undefined);
     }).catch((error) => {
