@@ -10,6 +10,8 @@ type HeaderProps = {
 }
 
 const Header = (props: HeaderProps) => {
+  const loggedIn = !!localStorage.getItem('token');
+
   return (
     <header className="w-full p-6 flex justify-between items-center bg-bg-primary border border-border rounded-xl shadow-3d-md dark:bg-dark-bg-primary dark:border-dark-border">
       <div className="flex gap-8 justify-center">
@@ -54,7 +56,7 @@ const Header = (props: HeaderProps) => {
         >
           <IconMenu2/>
         </button>
-        {buttonRoutes.map((buttonRoute, index) => (
+        {buttonRoutes(loggedIn).map((buttonRoute, index) => (
           <Link
             className="flex justify-center items-center h-9 w-9 rounded-full text-txt-secondary dark:text-dark-txt-secondary hover:bg-stone-200 f2ocus:bg-stone-200 dark:hover:bg-stone-800 dark:focus:bg-stone-800 max-sm:hidden"
             title={buttonRoute.name}

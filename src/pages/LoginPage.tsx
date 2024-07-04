@@ -44,7 +44,7 @@ const LoginPage = () => {
         label="Login Code"
         description="Enter your groups secret login code here"
         error={error}
-        placeholder={"1234567890"}
+        placeholder={"123456"}
         defaultValue={code ?? undefined}
         setValue={setInputCode}
       />

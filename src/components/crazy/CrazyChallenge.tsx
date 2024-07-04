@@ -37,6 +37,9 @@ const CrazyChallenge = (props: CrazyChallengeProps) => {
   }
 
   const getMessage = () => {
+    if (props.item.state === 'APPROVED') {
+      return "Good job, enjoy the points!"
+    }
     if (error) {
       return "Error...";
     } else if (percentage > 0) {
@@ -93,15 +96,15 @@ const CrazyChallenge = (props: CrazyChallengeProps) => {
         <form id={"form-" + props.item.id} onChange={(event) => uploadFile(event, props.item)}>
           <label
             htmlFor={"file-selector-" + props.item.id}
-            className={`relative w-full mt-2 py-2 px-4 flex items-center cursor-pointer justify-center rounded-lg bg-bg-primary text-txt-primary border-2 border-border dark:bg-dark-bg-primary dark:text-dark-txt-primary dark:border-dark-border ${denialReason ? "rounded-b-none" : ""}`}
+            className={`relative w-full mt-2 py-2 px-4 flex items-center justify-center rounded-lg bg-bg-primary text-txt-primary border-2 border-border dark:bg-dark-bg-primary dark:text-dark-txt-primary dark:border-dark-border ${denialReason ? "rounded-b-none" : ""}`}
           >
             <div style={{ width: `calc(100%*${(percentage > 0 ? (uploading ? percentage / 100 : 1) : 1)})` }}
-                 className={`transition-all absolute left-0 h-full flex items-center cursor-pointer justify-center rounded-md bg-primary text-txt-contrast border-2 border-primary-border dark:bg-dark-primary dark:text-dark-txt-contrast dark:border-dark-primary-border ${denialReason ? "rounded-b-none" : ""}`}/>
-            <div className="relative">
+                 className={`transition-all absolute left-0 h-full flex items-center justify-center rounded-md ${props.item.state === 'APPROVED' ? 'cursor-not-allowed' : 'cursor-pointer bg-primary text-txt-contrast border-primary-border dark:bg-dark-primary dark:text-dark-txt-contrast dark:border-dark-primary-border'} border-2 ${denialReason ? "rounded-b-none" : ""}`}/>
+            <div className={`relative ${props.item.state === 'APPROVED' ? 'text-txt-secondary dark:text-dark-txt-secondary' : ''}`}>
               {getMessage()}
             </div>
           </label>
-          <input id={"file-selector-" + props.item.id} type="file" name="files" className="hidden"/>
+          <input disabled={props.item.state === 'APPROVED'} id={"file-selector-" + props.item.id} type="file" name="files" className="hidden" accept="image/*, video/*"/>
         </form>
         {(denialReason || error) && (
           <p className="rounded-b-md px-2 py-1 font-bold italic text-sm bg-rose-200 text-rose-800 dark:bg-rose-800 dark:text-rose-200">

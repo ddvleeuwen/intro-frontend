@@ -3,16 +3,17 @@ import {
   IconCamera,
   IconClipboardList,
   IconHomeCheck,
-  IconLogin2,
+  IconLogin2, IconLogout2,
 } from "@tabler/icons-react";
 import LandingPage from "./pages/LandingPage.tsx";
 import LoginPage from "./pages/LoginPage.tsx";
 import TeamOverviewPage from "./pages/team/TeamOverviewPage.tsx";
+import LogoutPage from "./pages/LogoutPage.tsx";
 
 export type RouteType = {
   name: string;
   path: string;
-  component: ReactNode;
+  component?: ReactNode;
   icon?: ReactNode;
 }
 
@@ -38,17 +39,27 @@ export const actionRoute: RouteType | undefined = {
   icon: <IconCamera size="18px"/>
 }
 
-export const buttonRoutes: RouteType[] = [
-  {
-    component: <LoginPage/>,
-    name: "Login",
-    path: "/login",
-    icon: <IconLogin2/>
-  }
-]
+export const buttonRoutes = (loggedIn: boolean): RouteType[] => {
+  return loggedIn ? [
+    {
+      component: <LogoutPage/>,
+      name: "Logout",
+      path: "/logout",
+      icon: <IconLogout2/>,
+    }
+  ] : [
+    {
+      component: <LoginPage/>,
+      name: "Login",
+      path: "/login",
+      icon: <IconLogin2/>
+    }
+  ]
+}
 
 export const combined = [
   ...navigation,
   ...(actionRoute ? [ actionRoute ] : []),
-  ...buttonRoutes,
+  ...buttonRoutes(false),
+  ...buttonRoutes(true),
 ]

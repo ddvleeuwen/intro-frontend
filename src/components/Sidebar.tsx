@@ -12,6 +12,7 @@ export type SidebarProps = {
 
 const Sidebar = (props: SidebarProps) => {
   const location = useLocation();
+  const loggedIn = !!localStorage.getItem('token');
 
   useEffect(() => {
     props.setHidden(true);
@@ -61,7 +62,7 @@ const Sidebar = (props: SidebarProps) => {
             </Link>
           )}
           <ThemeSelector large={true}/>
-          {buttonRoutes.map((route, index) => (
+          {buttonRoutes(loggedIn).map((route, index) => (
             <Link
               key={index}
               className="flex items-center justify-between gap-2 p-4 px-4 rounded-lg bg-bg-primary text-txt-secondary border-2 border-border dark:bg-dark-bg-secondary dark:text-dark-txt-primary dark:border-dark-border"
