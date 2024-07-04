@@ -2,6 +2,7 @@ import { actionRoute, buttonRoutes, RouteType } from "../routes.tsx";
 import { Link } from "react-router-dom";
 import { cst } from "../constants.tsx";
 import { IconMenu2 } from "@tabler/icons-react";
+import { useEffect, useState } from "react";
 
 type HeaderProps = {
   routes: RouteType[];
@@ -10,10 +11,24 @@ type HeaderProps = {
 }
 
 const Header = (props: HeaderProps) => {
-  const loggedIn = !!localStorage.getItem('token');
+  const [loggedIn, setLoggedIn] = useState(!!localStorage.getItem('token'));
+
+  useEffect(() => {
+    function checkLoggedIn() {
+      const item = localStorage.getItem('token')
+      setLoggedIn(!!item)
+    }
+
+    window.addEventListener('storage', checkLoggedIn)
+
+    return () => {
+      window.removeEventListener('storage', checkLoggedIn)
+    }
+  }, []);
 
   return (
     <header className="w-full p-6 flex justify-between items-center bg-bg-primary border border-border rounded-xl shadow-3d-md dark:bg-dark-bg-primary dark:border-dark-border">
+      {loggedIn}
       <div className="flex gap-8 justify-center">
         <div className="flex gap-4 items-center">
           <img src={cst.logo} alt="React Logo" className="w-6 h-6"/>
