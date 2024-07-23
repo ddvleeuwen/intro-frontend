@@ -5,9 +5,9 @@ import { combined, navigation, actionRoute } from "./routes.tsx";
 import Sidebar from "./components/Sidebar.tsx";
 
 const AppRoot = () => {
-  const [prevScrollPos, setPrevScrollPos] = useState(0);
-  const [visible, setVisible] = useState(false);
-  const [sidebarHidden, setSidebarHidden] = useState(true);
+  const [ prevScrollPos, setPrevScrollPos ] = useState(0);
+  const [ visible, setVisible ] = useState(false);
+  const [ sidebarHidden, setSidebarHidden ] = useState(true);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -20,7 +20,7 @@ const AppRoot = () => {
 
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
-  }, [prevScrollPos, visible]);
+  }, [ prevScrollPos, visible ]);
 
   useEffect(() => {
     if (sidebarHidden) {
@@ -28,7 +28,7 @@ const AppRoot = () => {
     } else {
       document.body.style.overflow = 'hidden';
     }
-  }, [sidebarHidden]);
+  }, [ sidebarHidden ]);
 
   return (
     <Router>
@@ -37,13 +37,13 @@ const AppRoot = () => {
           <a href="#main" className="text-txt-contrast dark:text-dark-txt-contrast">Skip to content</a>
         </div>
       </div>
-      <div className={`p-8 max-md:px-4 sticky transition-all ${visible ? 'top-0' : 'top-[-100%]'}`}>
+      <div className={`p-8 max-md:px-4 sticky z-30 transition-all ${visible ? 'top-0' : 'top-[-100%]'}`}>
         <Header routes={navigation} actionRoute={actionRoute} setSidebarHidden={setSidebarHidden}/>
       </div>
       <Sidebar setHidden={setSidebarHidden} hidden={sidebarHidden}/>
       <main id="main" className="mx-8 px-6 max-md:px-0">
         <Routes>
-          {combined.map((route, index) => (
+          {combined.filter(route => route.component).map((route, index) => (
             <Route key={index} path={route.path} element={route.component} />
           ))}
         </Routes>

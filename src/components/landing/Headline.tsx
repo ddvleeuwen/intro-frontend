@@ -1,4 +1,5 @@
-import {IconArrowRight} from "@tabler/icons-react";
+import { IconArrowRight } from "@tabler/icons-react";
+import { Link } from "react-router-dom";
 
 const Headline = () => {
   return (
@@ -10,13 +11,13 @@ const Headline = () => {
         Deze website is jouw portaal voor het "Crazy88" spel.
         Waarbij je 88 opdrachten moet voltooien om de HU beter te leren kennen.
       </p>
-      <a
-        className={`shadow-3d-md flex gap-2 mt-8 p-4 px-8 rounded-full bg-primary text-txt-contrast border-2 border-primary-border dark:bg-dark-primary dark:text-dark-txt-contrast dark:border-dark-primary-border`}
-        href="#pricing"
+      <Link
+        className="shadow-3d-md flex gap-2 mt-8 p-4 px-8 rounded-full bg-primary text-txt-contrast border-2 border-primary-border dark:bg-dark-primary dark:text-dark-txt-contrast dark:border-dark-primary-border"
+        to="/team"
       >
         Begin het spel
         <IconArrowRight></IconArrowRight>
-      </a>
+      </Link>
     </div>
   );
 }
