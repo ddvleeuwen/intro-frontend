@@ -45,9 +45,11 @@ const CrazyChallenge = (props: CrazyChallengeProps) => {
     } else if (percentage > 0) {
       return uploading? "Uploading... " + percentage + "%" : "Submitted!";
     } else {
-      return `Submit ${props.item.state? " again" : ""} (#${props.item.id})`;
+      return `Submit ${props.item.state ? " again" : ""} (#${props.item.id})`;
     }
   }
+
+  const uploadDisabled = props.item.state === 'APPROVED' || props.item.state === 'PENDING';
 
   const getState = (state: string): CrazyChallengeState | undefined => {
     switch (state) {
@@ -96,15 +98,15 @@ const CrazyChallenge = (props: CrazyChallengeProps) => {
         <form id={"form-" + props.item.id} onChange={(event) => uploadFile(event, props.item)}>
           <label
             htmlFor={"file-selector-" + props.item.id}
-            className={`relative w-full mt-2 py-2 px-4 flex items-center justify-center rounded-lg bg-bg-primary text-txt-primary border-2 border-border dark:bg-dark-bg-primary dark:text-dark-txt-primary dark:border-dark-border ${denialReason ? "rounded-b-none" : ""}`}
+            className={`relative w-full mt-2 py-2 px-4 flex items-center justify-center rounded-lg bg-bg-primary text-txt-primary border-2 border-border dark:bg-dark-bg-primary dark:text-dark-txt-primary dark:border-dark-border ${(denialReason || error) ? "rounded-b-none" : ""}`}
           >
             <div style={{ width: `calc(100%*${(percentage > 0 ? (uploading ? percentage / 100 : 1) : 1)})` }}
-                 className={`transition-all absolute left-0 h-full flex items-center justify-center rounded-md ${props.item.state === 'APPROVED' ? 'cursor-not-allowed' : 'cursor-pointer bg-primary text-txt-contrast border-primary-border dark:bg-dark-primary dark:text-dark-txt-contrast dark:border-dark-primary-border'} border-2 ${denialReason ? "rounded-b-none" : ""}`}/>
-            <div className={`relative ${props.item.state === 'APPROVED' ? 'text-txt-secondary dark:text-dark-txt-secondary' : ''}`}>
+                 className={`transition-all absolute left-0 h-full flex items-center justify-center rounded-md ${uploadDisabled ? 'cursor-not-allowed' : 'cursor-pointer bg-primary text-txt-contrast border-primary-border dark:bg-dark-primary dark:text-dark-txt-contrast dark:border-dark-primary-border'} border-2 ${denialReason ? "rounded-b-none" : ""}`}/>
+            <div className={`relative ${uploadDisabled ? 'text-txt-secondary dark:text-dark-txt-secondary' : ''}`}>
               {getMessage()}
             </div>
           </label>
-          <input disabled={props.item.state === 'APPROVED'} id={"file-selector-" + props.item.id} type="file" name="files" className="hidden" accept="image/*, video/*"/>
+          <input disabled={uploadDisabled} id={"file-selector-" + props.item.id} type="file" name="files" className="hidden" accept="image/*, video/*"/>
         </form>
         {(denialReason || error) && (
           <p className="rounded-b-md px-2 py-1 font-bold italic text-sm bg-rose-200 text-rose-800 dark:bg-rose-800 dark:text-rose-200">
