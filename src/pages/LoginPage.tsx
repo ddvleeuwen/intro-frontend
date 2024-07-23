@@ -1,10 +1,13 @@
 import { Button } from '@headlessui/react'
 import { useNavigate } from "react-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Field from "../components/generic/Field.tsx";
 import { login } from "../services/auth.service.tsx";
+import { setSubTitle } from "../utils/title.tsx";
 
 const LoginPage = () => {
+  useEffect(() => setSubTitle('Login'), []);
+
   const queryParameters = new URLSearchParams(window.location.search)
   const code = queryParameters.get("code")
 
@@ -17,7 +20,7 @@ const LoginPage = () => {
     if (/^\d+$/.test(loginCode)) {
       login(loginCode).then(() => {
         // use react-router route to /team
-        navigate("/team", { replace: true });
+        navigate("/team");
       }).catch(() => {
         setError("Wrong login code, please try again");
       });

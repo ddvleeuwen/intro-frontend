@@ -1,10 +1,13 @@
 import { Link } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import BingoPage from "./BingoPage.tsx";
 import CrazyPage from "./CrazyPage.tsx";
 import AuthContextProvider from "../../context/AuthContextProvider.tsx";
+import { setSubTitle } from "../../utils/title.tsx";
 
 const TeamOverviewPage = () => {
+  useEffect(() => setSubTitle('Crazy88'), []);
+
   const queryParameters = new URLSearchParams(window.location.search)
   const page = queryParameters.get("page")
   const [ isRight, setIsRight ] = useState(page == "bingo");

@@ -2,8 +2,11 @@ import { useEffect, useState } from "react";
 import { getChallenges } from "../../services/challenge.service.tsx";
 import { Challenge } from "../../model/challenge.tsx";
 import CrazyChallenge from "../../components/crazy/CrazyChallenge.tsx";
+import { setSubTitle } from "../../utils/title.tsx";
 
 const CrazyPage = () => {
+  useEffect(() => setSubTitle('Crazy88'), []);
+
   const [ challenges, setChallenges ] = useState<Challenge[]>([]);
 
   useEffect(() => {

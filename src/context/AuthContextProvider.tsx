@@ -11,7 +11,7 @@ const AuthContextProvider = ({ children }: AuthContextProviderType) => {
   const route = useLocation();
 
   if (!localStorage.getItem('token')) {
-    return <Navigate to={`/login?to=${route.pathname}`}/>;
+    return <Navigate replace={true} to={`/login?to=${route.pathname}`}/>;
   }
 
   return (
