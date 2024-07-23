@@ -17,7 +17,7 @@ const LoginPage = () => {
     if (/^\d+$/.test(loginCode)) {
       login(loginCode).then(() => {
         // use react-router route to /team
-        navigate("/team");
+        navigate("/team", { replace: true });
       }).catch(() => {
         setError("Wrong login code, please try again");
       });
