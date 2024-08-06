@@ -9,6 +9,9 @@ export default {
   ],
   theme: {
     extend: {
+      animation: {
+        'spin-slow': 'spin 3s linear infinite',
+      },
       boxShadow: {
         '3d-sm': 'inset 0 -1px 2px 0 rgba(0, 0, 0, 0.1),' +
           'inset 0 1px 1px 0 rgba(255, 255, 255, 0.25),' +

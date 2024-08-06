@@ -42,7 +42,7 @@ const CrazyChallenge = (props: CrazyChallengeProps) => {
     }
     if (error) {
       return "Error...";
-    } else if (percentage > 0) {
+    } else if (percentage > 0 || props.item.state === 'PENDING') {
       return uploading? "Uploading... " + percentage + "%" : "Submitted!";
     } else {
       return `Submit ${props.item.state ? " again" : ""} (#${props.item.id})`;
@@ -55,7 +55,7 @@ const CrazyChallenge = (props: CrazyChallengeProps) => {
     switch (state) {
       case "PENDING":
         return {
-          icon: <IconLoader size="18px" className="animate-spin"/>,
+          icon: <IconLoader size="16px" className="animate-spin-slow"/>,
           text: "in review",
           className: "bg-stone-200 text-stone-800 dark:bg-stone-800 dark:text-stone-200"
         }
@@ -106,7 +106,7 @@ const CrazyChallenge = (props: CrazyChallengeProps) => {
               {getMessage()}
             </div>
           </label>
-          <input disabled={uploadDisabled} id={"file-selector-" + props.item.id} type="file" name="files" className="hidden" accept="image/*, video/*"/>
+          <input disabled={uploadDisabled} id={"file-selector-" + props.item.id} type="file" name="files" multiple className="hidden" accept="image/*, video/*"/>
         </form>
         {(denialReason || error) && (
           <p className="rounded-b-md px-2 py-1 font-bold italic text-sm bg-rose-200 text-rose-800 dark:bg-rose-800 dark:text-rose-200">

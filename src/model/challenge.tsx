@@ -3,7 +3,7 @@ export type Challenge = {
   title: string;
   challenge: string;
   points: number;
-  state: "PENDING" | "APPROVED" | "DENIED";
+  state: 'PENDING' | 'APPROVED' | 'DENIED';
   submittedAt: string;
   deniedReason?: string;
 }
