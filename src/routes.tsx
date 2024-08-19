@@ -9,6 +9,7 @@ import LandingPage from "./pages/LandingPage.tsx";
 import LoginPage from "./pages/LoginPage.tsx";
 import TeamOverviewPage from "./pages/team/TeamOverviewPage.tsx";
 import LogoutPage from "./pages/LogoutPage.tsx";
+import RulesPage from "./pages/RulesPage.tsx";
 
 export type RouteType = {
   name: string;
@@ -25,7 +26,7 @@ export const navigation: RouteType[] = [
     icon: <IconHomeCheck size="18px"/>
   },
   {
-    component: <h1>About</h1>,
+    component: <RulesPage/>,
     name: "Spelregels",
     path: "/regels",
     icon: <IconClipboardList size="18px"/>
