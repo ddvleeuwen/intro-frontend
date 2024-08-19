@@ -37,7 +37,7 @@ const BingoThumbnail = (props: BingoThumbnailProps) => {
                 <img
                     key={props.item.id}
                     src={getPictureUrl(props.item.id, true)}
-                    className="w-full  bg-bg-primary outline outline-2 outline-border dark:bg-dark-bg-primary dark:outline-dark-border"
+                    className="w-full bg-bg-primary outline outline-2 outline-border dark:bg-dark-bg-primary dark:outline-dark-border"
                     alt="Image showing one of the secret locations"
                 />
             </a>
