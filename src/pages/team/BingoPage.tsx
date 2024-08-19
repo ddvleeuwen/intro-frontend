@@ -35,13 +35,6 @@ const BingoPage = () => {
 
   const totalPoints = pictures.length * 20;
 
-
-  // grid of pictures, 5x5
-  // height of grid should be the same as the width
-  // width should be 100% of the parent
-  // grid should have a gap of 0
-  // every image should be square and cover the whole space
-  // the url of the picture uses getPictureUrl(picture.id)
   return (
       <div>
         <div className="w-full mb-8 flex flex-col gap-2">

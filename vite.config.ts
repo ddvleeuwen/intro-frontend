@@ -18,7 +18,7 @@ export default defineConfig({
   },
   server: {
     proxy: {
-      '/api': 'http://localhost:3080'
+      '/api': 'https://intro.svindicium.nl'
     }
   }
 })
