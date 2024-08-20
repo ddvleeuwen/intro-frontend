@@ -41,7 +41,7 @@ const AppRoot = () => {
         <Header routes={navigation} actionRoute={actionRoute} setSidebarHidden={setSidebarHidden}/>
       </div>
       <Sidebar setHidden={setSidebarHidden} hidden={sidebarHidden}/>
-      <main id="main" className="mx-8 px-6 max-md:px-0">
+      <main id="main" className="mx-8 px-6 pb-8 max-md:px-0">
         <Routes>
           {combined.filter(route => route.component).map((route, index) => (
             <Route key={index} path={route.path} element={route.component} />

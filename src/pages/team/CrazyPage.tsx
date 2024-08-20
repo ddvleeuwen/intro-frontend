@@ -21,7 +21,7 @@ const CrazyPage = () => {
     });
   }
 
-  type ChallengeState = "PENDING" | "APPROVED" | "DENIED";
+  type ChallengeState = 'PENDING' | 'APPROVED' | 'DENIED';
 
   // map of percentage of challenges completed by state (APPROVED, PENDING, DENIED)
   const completedChallenges = challenges.reduce<Record<ChallengeState, number>>((acc, challenge) => {
