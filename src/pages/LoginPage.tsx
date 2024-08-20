@@ -9,7 +9,7 @@ const LoginPage = () => {
   useEffect(() => setSubTitle('Login'), []);
 
   const queryParameters = new URLSearchParams(window.location.search)
-  const code = queryParameters.get("code")
+  const code = queryParameters.get("code") ?? queryParameters.get("joinCode")
 
   const navigate = useNavigate();
 
