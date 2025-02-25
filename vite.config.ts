@@ -3,6 +3,8 @@ import react from '@vitejs/plugin-react'
 import { createRoutedSitemap } from "./vite/sitemap.vite";
 import { createSEOTags } from "./vite/seo.vite";
 
+const isProduction = process.env.NODE_ENV === 'production';
+
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
@@ -18,7 +20,7 @@ export default defineConfig({
   },
   server: {
     proxy: {
-      '/api': 'https://intro.svindicium.nl'
+      '/api': isProduction ? 'https://intro.svindicium.nl' : 'http://localhost:3080'
     }
   }
 })

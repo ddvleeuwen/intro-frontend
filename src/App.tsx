@@ -9,6 +9,20 @@ const AppRoot = () => {
   const [ visible, setVisible ] = useState(false);
   const [ sidebarHidden, setSidebarHidden ] = useState(true);
 
+    useEffect(() => {
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/sw.js')
+                .then((reg) => console.log('Service Worker Registered', reg))
+                .catch((err) => console.log('Service Worker Registration Failed', err));
+
+            if ('SyncManager' in window) {
+                navigator.serviceWorker.ready.then((reg) => {
+                    reg.sync.register('sync-uploads');
+                });
+            }
+        }
+    }, []);
+
   useEffect(() => {
     const handleScroll = () => {
       const currentScrollPos = window.scrollY;
