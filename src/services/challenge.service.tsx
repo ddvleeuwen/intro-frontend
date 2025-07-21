@@ -21,9 +21,6 @@ export const uploadChallenge = async (
     headers: {
       'content-type': 'multipart/form-data',
       Authorization: `Bearer ${localStorage.getItem('token')}`
-    },
-    onUploadProgress: (progressEvent: AxiosProgressEvent) => {
-      setUploadPercentage(Math.round((progressEvent.loaded / (progressEvent.total ?? 1) * 100)));
     }
   };
 
@@ -35,66 +32,47 @@ export const uploadChallenge = async (
   , { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
 
   const attemptId = result.data
-  console.log(result.data);
 
-  uploadFilesInChunks(formData, (temp) => axios.post(`/api/challenges/${challenge.id}/attempt/${attemptId}`, temp, config))
-
-  // try {
-  //   const response = await axios.post(`/api/challenges/${challenge.id}`, formData, config);
-  //   return response;
-  // } catch (error) {
-  //   console.warn('Upload failed, saving to IndexedDB for retry later');
-  //
-  //   // Extract multiple files and additional fields
-  //   const filesArray: { fileName: string; fileType: string; fileData: ArrayBuffer }[] = [];
-  //   const additionalData: { [key: string]: string } = {};
-  //
-  //   const files = formData.getAll('files') as File[];
-  //   for (const file of files) {
-  //     const fileData = await file.arrayBuffer();
-  //     filesArray.push({ fileName: file.name, fileType: file.type, fileData });
-  //   }
-  //
-  //   formData.forEach((value, key) => {
-  //     if (key !== 'files') additionalData[key] = value as string;
-  //   });
-  //
-  //   await db.uploads.add({
-  //     challengeId: challenge.id,
-  //     files: filesArray,
-  //     additionalData
-  //   });
-  //
-  //   // Check if sync is supported
-  //
-  //   const registration = await navigator.serviceWorker.ready;
-  //
-  //   if ('sync' in registration) {
-  //     registration.sync.register('sync-uploads');
-  //   } else {
-  //     console.info('No background uploading detected')
-  //   }
-  //
-  //   throw error;
-  // }
+  await uploadFilesInChunks(
+      formData,
+      challenge.id,
+      attemptId,
+      config,
+      setUploadPercentage
+  )
 };
 
-function uploadFilesInChunks(formData: FormData, uploadMethod: (data: FormData) => Promise<AxiosResponse<any, any>>) {
+async function uploadFilesInChunks(formData: FormData, challengeId: number, attemptId: any, config: AxiosRequestConfig, setUploadPercentage: (percentage: number) => void) {
+  const uploads: Promise<void>[] = []
   const files = formData.getAll('files') as File[];  // Get all files from the 'files' input
+
+  // Bereken totaal aantal chunks
+  const chunkSize = 1024 * 1024; // 1MB
+  const totalChunks = files.reduce((total, file) => {
+    return total + Math.ceil(file.size / chunkSize);
+  }, 0);
+
+  let completedChunks = 0;
 
   if (files.length > 0) {
     files.forEach(file => {
       const fileName = file.name;
       const fileType = file.type
       const chunkSize = 1024 * 1024; // 1MB
-      const totalChunks = Math.ceil(file.size / chunkSize);
+      const amountOfChunks = Math.ceil(file.size / chunkSize);
 
       let start = 0;
       let end = chunkSize;
 
-      for (let chunkIndex = 0; chunkIndex < totalChunks; chunkIndex++) {
+      for (let chunkIndex = 0; chunkIndex < amountOfChunks; chunkIndex++) {
         const chunk = file.slice(start, end);
-        uploadChunk(chunk, fileName, fileType, chunkIndex, uploadMethod);
+        const upload = uploadChunk(challengeId, attemptId, config, chunk, fileName, fileType, chunkIndex)
+            .then(() => {
+              completedChunks++;
+              const percentage = Math.round((completedChunks / totalChunks) * 100);
+              setUploadPercentage(percentage);
+            });
+        uploads.push(upload);
 
         start = end;
         end = Math.min(start + chunkSize, file.size);
@@ -103,9 +81,10 @@ function uploadFilesInChunks(formData: FormData, uploadMethod: (data: FormData) 
   } else {
     console.error('No files found in FormData');
   }
+  await Promise.all(uploads)
 }
 
-async function uploadChunk(chunk: Blob, fileName: string, fileType: string, chunkIndex: number, uploadMethod: (data: FormData) => Promise<AxiosResponse<any, any>>) {
+async function uploadChunk(challengeId: number, attemptId: any, config: AxiosRequestConfig, chunk: Blob, fileName: string, fileType: string, chunkIndex: number) {
   const chunkFormData = new FormData();
   chunkFormData.append('chunk', chunk);
   chunkFormData.append('fileName', fileName);  // Send the file name for reference
@@ -113,22 +92,34 @@ async function uploadChunk(chunk: Blob, fileName: string, fileType: string, chun
   chunkFormData.append('chunkIndex', String(chunkIndex));
 
   try {
-    const response = await uploadMethod(chunkFormData)
+    const response = await axios.post(`/api/challenges/${challengeId}/attempt/${attemptId}`, chunkFormData, config)
     return response
 
   } catch (err) {
-    console.error(err)
+    console.warn('Upload failed, saving to IndexedDB for retry later');
+
+
+    await db.uploads.add({
+      challengeId,
+      attemptId,
+      chunkIndex: String(chunkIndex),
+      fileName,
+      fileType,
+      data: await chunk.arrayBuffer(),
+    });
+
+    // Check if sync is supported
+
+    const registration = await navigator.serviceWorker.ready;
+
+    if ('sync' in registration) {
+      registration.sync.register('sync-uploads');
+    } else {
+      console.info('No background uploading detected')
+    }
+
+    throw err;
   }
-  // uploadMethod(chunkFormData)
-  //     .then(response => {
-  //       if (!response.ok) {
-  //         throw new Error('Chunk upload failed');
-  //       }
-  //       console.log(`Chunk ${chunkIndex + 1} of ${totalChunks} for ${fileName} uploaded successfully.`);
-  //     })
-  //     .catch(error => {
-  //       console.error('Error uploading chunk:', error);
-  //     });
 }
 
 

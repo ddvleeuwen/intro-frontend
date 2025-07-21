@@ -2,9 +2,12 @@ import Dexie from 'dexie';
 
 interface UploadEntry {
     id?: number;
-    challengeId: string;
-    files: { fileName: string; fileType: string; fileData: ArrayBuffer }[]; // Store multiple files
-    additionalData: { [key: string]: string }; // Store other FormData fields
+    challengeId: number;
+    attemptId: string;
+    chunkIndex: string;
+    fileName: string;
+    fileType: string;
+    data: ArrayBuffer;
 }
 
 class UploadDatabase extends Dexie {
@@ -13,7 +16,7 @@ class UploadDatabase extends Dexie {
     constructor() {
         super('UploadDB');
         this.version(1).stores({
-            uploads: '++id, challengeId'
+            uploads: '++id, challengeId, attemptId, chunkIndex',
         });
 
         this.uploads = this.table('uploads');
