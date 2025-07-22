@@ -32,7 +32,7 @@ export const uploadPicture = (picture: Picture, formData: FormData, setUploadPer
         },
         onUploadProgress: (progressEvent: AxiosProgressEvent) => {
             setUploadPercentage(Math.round((progressEvent.loaded / (progressEvent.total ?? 1) * 100)))
-        }
+        },
     }
 
     return axios.post(`/api/pictures/${picture.id}`, formData, config);

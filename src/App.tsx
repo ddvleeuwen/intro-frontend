@@ -9,6 +9,24 @@ const AppRoot = () => {
   const [ visible, setVisible ] = useState(false);
   const [ sidebarHidden, setSidebarHidden ] = useState(true);
 
+    useEffect(() => {
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/sw.js')
+                .then((reg) => console.log('Service Worker Registered', reg))
+                .catch((err) => console.log('Service Worker Registration Failed', err));
+
+            if ('SyncManager' in window) {
+                navigator.serviceWorker.ready.then(async (registration) => {
+                    if ('sync' in registration) {
+                        // https://developer.mozilla.org/en-US/docs/Web/API/SyncManager
+                        const syncManager = registration.sync as { register: (tag: string) => Promise<undefined> };
+                        await syncManager.register('sync-uploads');
+                    }
+                });
+            }
+        }
+    }, []);
+
   useEffect(() => {
     const handleScroll = () => {
       const currentScrollPos = window.scrollY;
