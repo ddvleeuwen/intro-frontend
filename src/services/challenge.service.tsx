@@ -1,4 +1,4 @@
-import axios, { AxiosProgressEvent, AxiosRequestConfig, AxiosResponse } from "axios";
+import axios, { AxiosRequestConfig } from "axios";
 import { Challenge } from "../model/challenge.tsx";
 import { db } from "../utils/DexieDB.ts";
 
@@ -27,7 +27,7 @@ export const uploadChallenge = async (
   const chunkSize = 1024 * 1024; // 1MB
   
 
-  const result = await axios.post(`/api/challenges/${challenge.id}/attempt`,
+  const result = await axios.post<string>(`/api/challenges/${challenge.id}/attempt`,
     Object.fromEntries((formData.getAll("files") as File[]).map((file: File) => [ file.name, Math.ceil(file.size / chunkSize) ]))
   , { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
 
@@ -42,7 +42,7 @@ export const uploadChallenge = async (
   )
 };
 
-async function uploadFilesInChunks(formData: FormData, challengeId: number, attemptId: any, config: AxiosRequestConfig, setUploadPercentage: (percentage: number) => void) {
+async function uploadFilesInChunks(formData: FormData, challengeId: number, attemptId: string, config: AxiosRequestConfig, setUploadPercentage: (percentage: number) => void) {
   const uploads: Promise<void>[] = []
   const files = formData.getAll('files') as File[];  // Get all files from the 'files' input
 
@@ -84,7 +84,7 @@ async function uploadFilesInChunks(formData: FormData, challengeId: number, atte
   await Promise.all(uploads)
 }
 
-async function uploadChunk(challengeId: number, attemptId: any, config: AxiosRequestConfig, chunk: Blob, fileName: string, fileType: string, chunkIndex: number) {
+async function uploadChunk(challengeId: number, attemptId: string, config: AxiosRequestConfig, chunk: Blob, fileName: string, fileType: string, chunkIndex: number) {
   const chunkFormData = new FormData();
   chunkFormData.append('chunk', chunk);
   chunkFormData.append('fileName', fileName);  // Send the file name for reference
@@ -109,16 +109,17 @@ async function uploadChunk(challengeId: number, attemptId: any, config: AxiosReq
     });
 
     // Check if sync is supported
-
     const registration = await navigator.serviceWorker.ready;
 
     if ('sync' in registration) {
-      registration.sync.register('sync-uploads');
+      // https://developer.mozilla.org/en-US/docs/Web/API/SyncManager
+      const syncManager = registration.sync as { register: (tag: string) => Promise<undefined> };
+      await syncManager.register('sync-uploads');
+      return;
     } else {
       console.info('No background uploading detected')
+      throw err;
     }
-
-    throw err;
   }
 }
 

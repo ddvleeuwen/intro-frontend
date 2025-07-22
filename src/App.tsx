@@ -16,8 +16,12 @@ const AppRoot = () => {
                 .catch((err) => console.log('Service Worker Registration Failed', err));
 
             if ('SyncManager' in window) {
-                navigator.serviceWorker.ready.then((reg) => {
-                    reg.sync.register('sync-uploads');
+                navigator.serviceWorker.ready.then(async (registration) => {
+                    if ('sync' in registration) {
+                        // https://developer.mozilla.org/en-US/docs/Web/API/SyncManager
+                        const syncManager = registration.sync as { register: (tag: string) => Promise<undefined> };
+                        await syncManager.register('sync-uploads');
+                    }
                 });
             }
         }
